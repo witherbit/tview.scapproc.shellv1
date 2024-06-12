@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wcheck\wcheck.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\bin\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Scap.Api">
+      <HintPath>..\bin\Scap.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Scap.Bridge">
+      <HintPath>..\bin\Scap.Bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="Scap.Logic">
+      <HintPath>..\bin\Scap.Logic.dll</HintPath>
+    </Reference>
+    <Reference Include="Scap.Probes">
+      <HintPath>..\bin\Scap.Probes.dll</HintPath>
+    </Reference>
+    <Reference Include="Scap.ProbesEx">
+      <HintPath>..\bin\Scap.ProbesEx.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
