@@ -27,6 +27,7 @@ using wshell.Utils;
 using static MaterialDesignThemes.Wpf.Theme;
 using tview.scapproc.shellv1.Enums;
 using System.Diagnostics;
+using tview.scapproc.shellv1.Controls;
 
 
 namespace tview.scapproc.shellv1
@@ -60,7 +61,6 @@ namespace tview.scapproc.shellv1
                 uiTextCaption.Text = e;
             }));
         }
-
         private void OnStateChanged(object? sender, ScapState e)
         {
             switch (e)
@@ -103,89 +103,67 @@ namespace tview.scapproc.shellv1
                         uiCircleGetInfo.Fill = _inComplete;
                         uiCircleStop.Fill = _inProgress;
 
-                        if (Processor.CriticalDefenitions.Length > 0)
-                        {
-                            uiExpanderCritical.Visibility = Visibility.Visible;
-                            uiDataGridCritical.ItemsSource = Processor.CriticalDefenitions;
-                            uiTextCritical.Text += $" [{Processor.CriticalDefenitions.Length}]";
-                        }
-                        if (Processor.HighDefenitions.Length > 0)
-                        {
-                            uiExpanderHigh.Visibility = Visibility.Visible;
-                            uiDataGridHigh.ItemsSource = Processor.HighDefenitions;
-                            uiTextHigh.Text += $" [{Processor.HighDefenitions.Length}]";
-                        }
-                        if (Processor.MediumDefenitions.Length > 0)
-                        {
-                            uiExpanderMedium.Visibility = Visibility.Visible;
-                            uiDataGridMedium.ItemsSource = Processor.MediumDefenitions;
-                            uiTextMedium.Text += $" [{Processor.MediumDefenitions.Length}]";
-                        }
-                        if (Processor.LowDefenitions.Length > 0)
-                        {
-                            uiExpanderLow.Visibility = Visibility.Visible;
-                            uiDataGridLow.ItemsSource = Processor.LowDefenitions;
-                            uiTextLow.Text += $" [{Processor.LowDefenitions.Length}]";
-                        }
-                        if (Processor.InventoryDefenitions.Length > 0)
-                        {
-                            uiExpanderInventory.Visibility = Visibility.Visible;
-                            uiDataGridInventory.ItemsSource = Processor.InventoryDefenitions;
-                            uiTextInventory.Text += $" [{Processor.InventoryDefenitions.Length}]";
-                        }
-
-                        uiGridCaption.Visibility = Visibility.Collapsed;
-
-                        uiCircleStop.Fill = _inComplete;
+                        SetResult();
                     });
                     break;
             }
         }
-
         public void StartTask()
         {
             Processor.StartAsync(Shell.CancellationToken);
         }
-
         private void uiCloseTab_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void uiDataGridCritical_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void SetResult()
         {
-            var destination = e.Uri.OriginalString;
-            ProcessStartInfo psInfo = new ProcessStartInfo
+            if (Processor.CriticalDefenitions.Length > 0)
             {
-                FileName = $"https://ovaldbru.altx-soft.ru/Definition.aspx?id={destination}",
-                UseShellExecute = true
-            };
-            Process.Start(psInfo);
-            e.Handled = true;
-        }
-
-        private void TextBlock_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var textBlock = sender as TextBlock;
-            textBlock.Foreground = "#fca577".GetBrush();
-        }
-
-        private void TextBlock_MouseLeave(object sender, MouseEventArgs e)
-        {
-            var textBlock = sender as TextBlock;
-            textBlock.Foreground = "#dfdfdf".GetBrush();
-        }
-
-        private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var textBlock = sender as TextBlock;
-            var destination = textBlock.Text.Replace("Больше информации и способы решения: ", "");
-            ProcessStartInfo psInfo = new ProcessStartInfo
+                uiExpanderCritical.Visibility = Visibility.Visible;
+                AddRangeDefenitions(uiStackPanelCritical, Processor.CriticalDefenitions);
+                uiTextCritical.Text += $" [{Processor.CriticalDefenitions.Length}]";
+            }
+            if (Processor.HighDefenitions.Length > 0)
             {
-                FileName = destination,
-                UseShellExecute = true
-            };
-            Process.Start(psInfo);
+                uiExpanderHigh.Visibility = Visibility.Visible;
+                AddRangeDefenitions(uiStackPanelHigh, Processor.HighDefenitions);
+                uiTextHigh.Text += $" [{Processor.HighDefenitions.Length}]";
+            }
+            if (Processor.MediumDefenitions.Length > 0)
+            {
+                uiExpanderMedium.Visibility = Visibility.Visible;
+                AddRangeDefenitions(uiStackPanelMedium, Processor.MediumDefenitions);
+                uiTextMedium.Text += $" [{Processor.MediumDefenitions.Length}]";
+            }
+            if (Processor.LowDefenitions.Length > 0)
+            {
+                uiExpanderLow.Visibility = Visibility.Visible;
+                AddRangeDefenitions(uiStackPanelLow, Processor.LowDefenitions);
+                uiTextLow.Text += $" [{Processor.LowDefenitions.Length}]";
+            }
+            if (Processor.InventoryDefenitions.Length > 0)
+            {
+                uiExpanderInventory.Visibility = Visibility.Visible;
+                AddRangeDefenitions(uiStackPanelInventory, Processor.InventoryDefenitions);
+                uiTextInventory.Text += $" [{Processor.InventoryDefenitions.Length}]";
+            }
+
+            uiGridCaption.Visibility = Visibility.Collapsed;
+
+            uiCircleStop.Fill = _inComplete;
+        }
+
+        private void AddRangeDefenitions(StackPanel panel, IEnumerable<Defenition> defenitions)
+        {
+            foreach (var def in defenitions)
+            {
+                panel.Children.Add(new ScapControl(def)
+                {
+                    Margin = new Thickness(5, 5, 5, 0)
+                });
+            }
         }
     }
 }

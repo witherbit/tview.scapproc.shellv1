@@ -206,7 +206,7 @@ namespace tview.scapproc.shellv1
                 if (reference.RefSource.ToLower() == "fstec")
                     result = reference.RefUrl;
             }
-            return "Больше информации и способы решения: " + result;
+            return result;
         }
     }
 }

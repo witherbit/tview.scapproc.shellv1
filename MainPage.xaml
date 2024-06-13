@@ -172,207 +172,31 @@ HorizontalAlignment="Left" Margin="10 0"/>
                     <Expander.Header>
                         <TextBlock x:Name="uiTextCritical" Text="Критический уровень риска" Foreground="#1f1f1f" FontFamily="Arial"/>
                     </Expander.Header>
-                    <DataGrid x:Name="uiDataGridCritical" 
-                AutoGenerateColumns="False" 
-                HorizontalGridLinesBrush="DarkGray"
-                RowBackground="LightGray" 
-                AlternatingRowBackground="White" 
-                HorizontalScrollBarVisibility="Disabled"
-                              Width="Auto" Height="Auto"
-                              FontFamily="Arial"
-Foreground="#1f1f1f" Hyperlink.RequestNavigate="uiDataGridCritical_RequestNavigate">
-                        <DataGrid.Items>
-                        </DataGrid.Items>
-                        <DataGrid.Columns>
-                            <DataGridHyperlinkColumn Header="Id" Binding="{Binding Path=Id}" IsReadOnly="True">
-                            </DataGridHyperlinkColumn>
-                            <DataGridTextColumn Width="350" Header="Название" Binding="{Binding Path=Title}" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Класс" Binding="{Binding Path=Class}" Width="90" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <StackPanel Background="#1f1f1f">
-                                    <TextBlock Margin="10 10 10 5" Foreground="#dfdfdf" Width="500" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow"/>
-                                    <TextBlock Margin="10 0 10 10"
-                                               Foreground="#dfdfdf"
-                                               HorizontalAlignment="Right"
-                                               Text="{Binding Path=Hyperlink}"
-                                               MouseEnter="TextBlock_MouseEnter"
-                                               MouseLeave="TextBlock_MouseLeave"
-                                               MouseLeftButtonUp="TextBlock_MouseLeftButtonUp"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
+                    <StackPanel Name="uiStackPanelCritical"/>
                 </Expander>
                 <Expander x:Name="uiExpanderHigh" Visibility="Collapsed">
                     <Expander.Header>
                         <TextBlock x:Name="uiTextHigh" Text="Высокий уровень риска" Foreground="#1f1f1f" FontFamily="Arial"/>
                     </Expander.Header>
-                    <DataGrid x:Name="uiDataGridHigh" 
-AutoGenerateColumns="False" 
-HorizontalGridLinesBrush="DarkGray"
-RowBackground="LightGray" 
-AlternatingRowBackground="White" 
-HorizontalScrollBarVisibility="Disabled"
-                              Width="Auto" Height="Auto"
-                              FontFamily="Arial"
-Foreground="#1f1f1f" Hyperlink.RequestNavigate="uiDataGridCritical_RequestNavigate">
-                        <DataGrid.Items>
-                        </DataGrid.Items>
-                        <DataGrid.Columns>
-                            <DataGridHyperlinkColumn Header="Id" Binding="{Binding Path=Id}" IsReadOnly="True"/>
-                            <DataGridTextColumn Width="350" Header="Название" Binding="{Binding Path=Title}" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Класс" Binding="{Binding Path=Class}" Width="90" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <StackPanel Background="#1f1f1f">
-                                    <TextBlock Margin="10 10 10 5" Width="500" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow"
-                                               Foreground="#dfdfdf"/>
-                                    <TextBlock Margin="10 0 10 10"
-           Foreground="#dfdfdf"
-           HorizontalAlignment="Right"
-           Text="{Binding Path=Hyperlink}"
-           MouseEnter="TextBlock_MouseEnter"
-           MouseLeave="TextBlock_MouseLeave"
-           MouseLeftButtonUp="TextBlock_MouseLeftButtonUp"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
+                    <StackPanel Name="uiStackPanelHigh"/>
                 </Expander>
                 <Expander  x:Name="uiExpanderMedium" Visibility="Collapsed">
                     <Expander.Header>
                         <TextBlock x:Name="uiTextMedium" Text="Средний уровень риска" Foreground="#1f1f1f" FontFamily="Arial"/>
                     </Expander.Header>
-                    <DataGrid x:Name="uiDataGridMedium" 
-                  AutoGenerateColumns="False" 
-                  HorizontalGridLinesBrush="DarkGray"
-                  RowBackground="LightGray" 
-                  AlternatingRowBackground="White" 
-                  Width="Auto" Height="Auto"
-                              FontFamily="Arial"
-Foreground="#1f1f1f" Hyperlink.RequestNavigate="uiDataGridCritical_RequestNavigate">
-                        <DataGrid.Items>
-                        </DataGrid.Items>
-                        <DataGrid.Columns>
-                            <DataGridHyperlinkColumn Header="Id" Binding="{Binding Path=Id}" IsReadOnly="True"/>
-                            <DataGridTextColumn Width="350" Header="Название" Binding="{Binding Path=Title}" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Класс" Binding="{Binding Path=Class}" Width="90" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <StackPanel Background="#1f1f1f">
-                                    <TextBlock Margin="10 10 10 5" Foreground="#dfdfdf" Width="500" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow"/>
-                                    <TextBlock Margin="10 0 10 10"
-           Foreground="#dfdfdf"
-           HorizontalAlignment="Right"
-           Text="{Binding Path=Hyperlink}"
-           MouseEnter="TextBlock_MouseEnter"
-           MouseLeave="TextBlock_MouseLeave"
-           MouseLeftButtonUp="TextBlock_MouseLeftButtonUp"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
+                    <StackPanel Name="uiStackPanelMedium"/>
                 </Expander>
                 <Expander  x:Name="uiExpanderLow" Visibility="Collapsed">
                     <Expander.Header>
                         <TextBlock x:Name="uiTextLow" Text="Низкий уровень риска" Foreground="#1f1f1f" FontFamily="Arial"/>
                     </Expander.Header>
-                    <DataGrid x:Name="uiDataGridLow" 
-  AutoGenerateColumns="False" 
-  HorizontalGridLinesBrush="DarkGray"
-  RowBackground="LightGray" 
-  AlternatingRowBackground="White" 
-  HorizontalScrollBarVisibility="Disabled"
-                              Width="Auto" Height="Auto"
-                              FontFamily="Arial"
-Foreground="#1f1f1f" Hyperlink.RequestNavigate="uiDataGridCritical_RequestNavigate">
-                        <DataGrid.Items>
-                        </DataGrid.Items>
-                        <DataGrid.Columns>
-                            <DataGridHyperlinkColumn Header="Id" Binding="{Binding Path=Id}" IsReadOnly="True"/>
-                            <DataGridTextColumn Width="350" Header="Название" Binding="{Binding Path=Title}" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Класс" Binding="{Binding Path=Class}" Width="90" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <StackPanel Background="#1f1f1f">
-                                    <TextBlock Margin="10 10 10 5" Foreground="#dfdfdf" Width="500" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow"/>
-                                    <TextBlock Margin="10 0 10 10"
-           Foreground="#dfdfdf"
-           HorizontalAlignment="Right"
-           Text="{Binding Path=Hyperlink}"
-           MouseEnter="TextBlock_MouseEnter"
-           MouseLeave="TextBlock_MouseLeave"
-           MouseLeftButtonUp="TextBlock_MouseLeftButtonUp"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
+                    <StackPanel Name="uiStackPanelLow"/>
                 </Expander>
                 <Expander  x:Name="uiExpanderInventory" Visibility="Collapsed">
                     <Expander.Header>
                         <TextBlock x:Name="uiTextInventory" Text="Инвентаризация текущего хоста" Foreground="#1f1f1f" FontFamily="Arial"/>
                     </Expander.Header>
-                    <DataGrid x:Name="uiDataGridInventory" 
-  AutoGenerateColumns="False" 
-  HorizontalGridLinesBrush="DarkGray"
-  RowBackground="LightGray" 
-  AlternatingRowBackground="White" 
-  HorizontalScrollBarVisibility="Disabled"
-                              Width="Auto" Height="Auto"
-                              FontFamily="Arial"
-                              Foreground="#1f1f1f" Hyperlink.RequestNavigate="uiDataGridCritical_RequestNavigate">
-                        <DataGrid.Items>
-                        </DataGrid.Items>
-                        <DataGrid.Columns>
-                            <DataGridHyperlinkColumn Header="Id" Binding="{Binding Path=Id}" IsReadOnly="True"/>
-                            <DataGridTextColumn Width="350" Header="Название" Binding="{Binding Path=Title}" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
-                                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Класс" Binding="{Binding Path=Class}" Width="90" IsReadOnly="True"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <StackPanel Name="uiStackPanelInventory"/>
                 </Expander>
             </StackPanel>
         </ScrollViewer>
