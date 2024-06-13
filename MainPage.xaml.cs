@@ -60,6 +60,7 @@ namespace tview.scapproc.shellv1
             {
                 uiTextCaption.Text = e;
             }));
+            Processor.OutputRedirect.InvokeEventAsync("output", e);
         }
         private void OnStateChanged(object? sender, ScapState e)
         {
@@ -73,6 +74,7 @@ namespace tview.scapproc.shellv1
                         uiCircleWait.Fill = _inComplete;
                         uiCircleInit.Fill = _inProgress;
                     });
+                    Processor.OutputRedirect.InvokeEventAsync("state", "Инициализация SCAP [2/7]");
                     break;
                 case ScapState.LoadDefenitions:
                     this.Invoke(() =>
@@ -80,6 +82,7 @@ namespace tview.scapproc.shellv1
                         uiCircleInit.Fill = _inComplete;
                         uiCircleLoad.Fill = _inProgress;
                     });
+                    Processor.OutputRedirect.InvokeEventAsync("state", "Загрузка OVAL определений [3/7]");
                     break;
                 case ScapState.Eval:
                     this.Invoke(() =>
@@ -87,6 +90,7 @@ namespace tview.scapproc.shellv1
                         uiCircleLoad.Fill = _inComplete;
                         uiCircleEval.Fill = _inProgress;
                     });
+                    Processor.OutputRedirect.InvokeEventAsync("state", "Выолнение OVAL определений [4/7]");
                     break;
                 case ScapState.GetInfo:
                     this.Invoke(() =>
@@ -96,12 +100,15 @@ namespace tview.scapproc.shellv1
                         uiCircleGetList.Fill = _inComplete;
                         uiCircleGetInfo.Fill = _inProgress;
                     });
+                    Processor.OutputRedirect.InvokeEventAsync("state", "Анализ найденных уязвимостей [6/7]");
                     break;
                 case ScapState.Result:
                     this.Invoke(() =>
                     {
                         uiCircleGetInfo.Fill = _inComplete;
                         uiCircleStop.Fill = _inProgress;
+
+                        Processor.OutputRedirect.InvokeEventAsync("state", "Завершение задания [7/7]");
 
                         SetResult();
                     });
@@ -110,6 +117,8 @@ namespace tview.scapproc.shellv1
         }
         public void StartTask()
         {
+            Processor.OutputRedirect = Shell.GetEventRedirect();
+            Processor.OutputRedirect.InvokeEventAsync("state", "Запуск задания [1/7]");
             Processor.StartAsync(Shell.CancellationToken);
         }
         private void uiCloseTab_Click(object sender, RoutedEventArgs e)
@@ -153,6 +162,8 @@ namespace tview.scapproc.shellv1
             uiGridCaption.Visibility = Visibility.Collapsed;
 
             uiCircleStop.Fill = _inComplete;
+            Processor.OutputRedirect.InvokeEventAsync("state", "Выполнено");
+            Processor.OutputRedirect.InvokeEventAsync("complete", new ScapStatisticTemplate());
         }
 
         private void AddRangeDefenitions(StackPanel panel, IEnumerable<Defenition> defenitions)

@@ -16,6 +16,7 @@ using tview.scapproc.shellv1.Enums;
 using System.IO;
 using Newtonsoft.Json;
 using Scap.Bridge.Oval.Model.Executable;
+using wshell.Objects;
 
 namespace tview.scapproc.shellv1
 {
@@ -26,6 +27,8 @@ namespace tview.scapproc.shellv1
 
         public event EventHandler<ScapState> StateChanged;
         public event EventHandler<string> OvalInfoLoaded;
+
+        public EventRedirect OutputRedirect { get; internal set; }
 
         private List<Defenition> defenitionsCritical = new List<Defenition>();
         private List<Defenition> defenitionsHigh = new List<Defenition>();

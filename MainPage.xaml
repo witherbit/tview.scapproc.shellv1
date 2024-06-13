@@ -124,7 +124,7 @@
                Height="10" Width="10"
                Fill="#1f1f1f" Stroke="#1f1f1f" Name="uiCircleGetInfo"/>
                     <TextBlock Grid.Column="1" 
-               Text="Получение информации об уязвимостях" 
+               Text="Анализ найденных уязвимостей" 
                FontFamily="Arial"
                Foreground="#1f1f1f"
                VerticalAlignment="Center"
