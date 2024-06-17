@@ -25,10 +25,10 @@ namespace tview.scapproc.shellv1
         public string XsdPath { get; private set; }
         public string DefenitionsPath { get; private set; }
 
+        public EventRedirect OutputRedirect { get; set; }
+
         public event EventHandler<ScapState> StateChanged;
         public event EventHandler<string> OvalInfoLoaded;
-
-        public EventRedirect OutputRedirect { get; internal set; }
 
         private List<Defenition> defenitionsCritical = new List<Defenition>();
         private List<Defenition> defenitionsHigh = new List<Defenition>();

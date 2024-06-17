@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,10 +8,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using wcheck.Utils;
 using wcheck.wcontrols;
 using wcheck.wshell.Enums;
 using wcheck.wshell.Objects;
 using wshell.Abstract;
+using wshell.Net.Nodes;
 using wshell.Utils;
 
 namespace tview.scapproc.shellv1
@@ -17,6 +21,7 @@ namespace tview.scapproc.shellv1
     public class ScapShell : ShellBase
     {
         public MainPage Page { get; private set; }
+        public ClientContext ClientContext { get; private set; }
         public CancellationToken CancellationToken { get; private set; }
         private CancellationTokenSource _cts { get; set; }
         public ScapShell() : base(new wshell.Objects.ShellInfo("SCAP", "1.0.0", new Guid("ee3de59e-00e8-40e9-bfcd-cba116b9a81d"), wshell.Enums.ShellType.TaskView, "SCAP процессор для интерпритации и эвалюации OVAL", "Артем И.С."))
@@ -48,11 +53,35 @@ namespace tview.scapproc.shellv1
 
         public override Schema OnHostCallback(Schema schema)
         {
+            Page.Invoke(() =>
+            {
+                Logger.Log(new LogContent($"Contract request handling: {JsonConvert.SerializeObject(schema, Formatting.Indented)}", this));
+            });
             switch (schema.Type)
             {
                 case CallbackType.StartTaskView:
+                    Page.Invoke(() =>
+                    {
+                        Logger.Log(new LogContent($"Handle request: StartTaskView", this));
+                    });
                     Page.StartTask();
                     break;
+                case CallbackType.RedirectNetRequest:
+                    var node = schema.GetProviding<Node>();
+                    Page.Invoke(() =>
+                    {
+                        Logger.Log(new LogContent($"Handle request: RedirectNetRequest: {JsonConvert.SerializeObject(node, Formatting.Indented)}", this));
+                    });
+                    if (node.GetAttribute("type") == "start task")
+                    {
+                        ClientContext = new ClientContext(node, this);
+                        ClientContext.StartTask();
+                        Page.Invoke(() =>
+                        {
+                            Logger.Log(new LogContent($"Handle request: RedirectNetRequest: {ClientContext.Ip}", this));
+                        });
+                    }
+                    return new Schema(CallbackType.RedirectNetResponse).SetProviding(new Node("redirect response", new Dictionary<string, string> { { "code", "200" } }));
             }
             return new Schema(CallbackType.EmptyResponse);
         }
