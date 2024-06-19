@@ -28,6 +28,8 @@ using static MaterialDesignThemes.Wpf.Theme;
 using tview.scapproc.shellv1.Enums;
 using System.Diagnostics;
 using tview.scapproc.shellv1.Controls;
+using System.Net.NetworkInformation;
+using wshell.Net.Nodes;
 
 
 namespace tview.scapproc.shellv1
@@ -163,7 +165,8 @@ namespace tview.scapproc.shellv1
 
             uiCircleStop.Fill = _inComplete;
             Processor.OutputRedirect.InvokeEventAsync("state", "Выполнено");
-            Processor.OutputRedirect.InvokeEventAsync("complete", new ScapStatisticTemplate());
+            var template = new ScapStatisticTemplate(Processor.CriticalDefenitions, Processor.HighDefenitions, Processor.MediumDefenitions, Processor.LowDefenitions, Processor.InventoryDefenitions, GetIp());
+            Processor.OutputRedirect.InvokeEventAsync("complete", template);
         }
 
         private void AddRangeDefenitions(StackPanel panel, IEnumerable<Defenition> defenitions)
@@ -175,6 +178,46 @@ namespace tview.scapproc.shellv1
                     Margin = new Thickness(5, 5, 5, 0)
                 });
             }
+        }
+
+        private static string GetIp()
+        {
+            string result = "?";
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+
+                var defGate = from nics in NetworkInterface.GetAllNetworkInterfaces()
+
+
+                              from props in nics.GetIPProperties().GatewayAddresses
+                              where nics.OperationalStatus == OperationalStatus.Up
+                              select props.Address.ToString(); // this sets the default gateway in a variable
+
+                GatewayIPAddressInformationCollection prop = ni.GetIPProperties().GatewayAddresses;
+
+                if (defGate.First() != null)
+                {
+
+                    IPInterfaceProperties ipProps = ni.GetIPProperties();
+
+                    foreach (UnicastIPAddressInformation addr in ipProps.UnicastAddresses)
+                    {
+
+                        if (addr.Address.ToString().Contains(defGate.First().Remove(defGate.First().LastIndexOf(".")))) // The IP address of the computer is always a bit equal to the default gateway except for the last group of numbers. This splits it and checks if the ip without the last group matches the default gateway
+                        {
+
+                            if (result == "?") // check if the string has been changed before
+                            {
+                                result = addr.Address.ToString(); // put the ip address in a string that you can use.
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+            return result;
         }
     }
 }

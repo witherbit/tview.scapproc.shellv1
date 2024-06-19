@@ -53,33 +53,17 @@ namespace tview.scapproc.shellv1
 
         public override Schema OnHostCallback(Schema schema)
         {
-            Page.Invoke(() =>
-            {
-                Logger.Log(new LogContent($"Contract request handling: {JsonConvert.SerializeObject(schema, Formatting.Indented)}", this));
-            });
             switch (schema.Type)
             {
                 case CallbackType.StartTaskView:
-                    Page.Invoke(() =>
-                    {
-                        Logger.Log(new LogContent($"Handle request: StartTaskView", this));
-                    });
                     Page.StartTask();
                     break;
                 case CallbackType.RedirectNetRequest:
                     var node = schema.GetProviding<Node>();
-                    Page.Invoke(() =>
-                    {
-                        Logger.Log(new LogContent($"Handle request: RedirectNetRequest: {JsonConvert.SerializeObject(node, Formatting.Indented)}", this));
-                    });
                     if (node.GetAttribute("type") == "start task")
                     {
                         ClientContext = new ClientContext(node, this);
                         ClientContext.StartTask();
-                        Page.Invoke(() =>
-                        {
-                            Logger.Log(new LogContent($"Handle request: RedirectNetRequest: {ClientContext.Ip}", this));
-                        });
                     }
                     return new Schema(CallbackType.RedirectNetResponse).SetProviding(new Node("redirect response", new Dictionary<string, string> { { "code", "200" } }));
             }

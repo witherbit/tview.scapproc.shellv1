@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using pwither.IO;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -35,20 +37,8 @@ namespace tview.scapproc.shellv1
         {
             Shell = shell;
             TaskId = node.GetAttribute("task id");
-            Shell.Page.Invoke(() =>
-            {
-                Logger.Log(new LogContent($"Client Context task: TaskId = {TaskId}", this));
-            });
             Ip = node.GetAttribute("from");
-            Shell.Page.Invoke(() =>
-            {
-                Logger.Log(new LogContent($"Client Context task: Ip = {Ip}", this));
-            });
             EventRedirect = new ScapOutputRedirect(shell);
-            Shell.Page.Invoke(() =>
-            {
-                Logger.Log(new LogContent($"Client Context task: EV = {EventRedirect}", this));
-            });
             Shell.SetEventRedirect(EventRedirect);
             EventRedirect.Output += OnOutput;
             EventRedirect.Complete += OnComplete;
@@ -62,16 +52,25 @@ namespace tview.scapproc.shellv1
                 .SetAttribute("task id", TaskId));
         }
 
-        private void OnComplete(IStatisticTemplate template)
+        private async void OnComplete(IStatisticTemplate template)
         {
-            ClientProviding.GetRedirectAsync(Ip, TargetId, new Node(null)
-                .SetAttribute("type", "task complete")
-                .SetAttribute("task id", TaskId)
+            var tempPath = (string)Shell.RequestSettingsProperty(SettingsParamConsts.ParameterPath.p_PathToTemp).Value;
+            var fileId = Guid.NewGuid().ToString().Replace("-", "");
+            var fileName = tempPath + $@"\{fileId}.wuniversal";
+            var node = new Node("file", NetHandleStatisticTemplate.ConvertToNetworkingTemplate(template))
                 .SetAttribute("vuln-crit", Shell.Page.Processor.CriticalDefenitions.Length.ToString())
                 .SetAttribute("vuln-high", Shell.Page.Processor.HighDefenitions.Length.ToString())
                 .SetAttribute("vuln-mid", Shell.Page.Processor.MediumDefenitions.Length.ToString())
                 .SetAttribute("vuln-low", Shell.Page.Processor.LowDefenitions.Length.ToString())
-                .SetAttribute("inv", Shell.Page.Processor.InventoryDefenitions.Length.ToString()));
+                .SetAttribute("inv", Shell.Page.Processor.InventoryDefenitions.Length.ToString());
+            System.IO.File.WriteAllBytes(fileName, node.Pack(new SocketInitializeParameters { AuthType = wshell.Enums.SocketAuthType.Aes, UseEncryption = false}));
+            File file = new File(fileName, 4096);
+            var count = file.GetPartsCount().ToString();
+            ClientProviding.GetRedirectAsync(Ip, TargetId, new Node(null)
+                .SetAttribute("type", "task complete")
+                .SetAttribute("task id", TaskId)
+                .SetAttribute("content id", fileId)
+                .SetAttribute("content count", count));
         }
 
         private void OnOutput(string obj)
@@ -84,14 +83,6 @@ namespace tview.scapproc.shellv1
         public void StartTask()
         {
             ClientProviding = Shell.RequestClientProviding();
-            Shell.Page.Invoke(() =>
-            {
-                Logger.Log(new LogContent($"Client Context task: Client = {ClientProviding}", this));
-            });
-            Shell.Page.Invoke(() =>
-            {
-                Logger.Log(new LogContent($"Start Client Context task", this));
-            });
             Shell.Page.StartTask();
         }
     }
